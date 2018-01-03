@@ -4,7 +4,9 @@ output: html_notebook
 ---
 
 #Load Packages
+```{r}
 library(tidyverse)
+```
 
 #Load Data Set
 ```{r}
@@ -24,6 +26,7 @@ refine$company <- tolower(refine$company) %>%
 
 #Separate product code and number
 ```{r}
+newcols = c("product_code","product_number")
 refine <- refine %>% 
   separate(., "Product code / number", newcols, sep = "-", remove = FALSE)
 ```
