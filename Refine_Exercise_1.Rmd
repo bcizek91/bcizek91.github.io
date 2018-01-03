@@ -1,0 +1,56 @@
+---
+title: "Refine_Exercise 1"
+output: html_notebook
+---
+
+#Load Packages
+library(tidyverse)
+
+#Load Data Set
+```{r}
+library(readr)
+refine <- read_csv("refine.csv")
+refine <- tbl_df(refine)
+```
+
+#Clean up Brand Names
+```{r}
+refine$company <- tolower(refine$company) %>% 
+  gsub("0", "o", .) %>% 
+  sub("k z", "kz", .) %>% 
+  sub("lv", "lev", .) %>% 
+  sub("^([fp].+)", "phillips", .)
+```
+
+#Separate product code and number
+```{r}
+refine <- refine %>% 
+  separate(., "Product code / number", newcols, sep = "-", remove = FALSE)
+```
+#Add product categories
+```{r}
+categoryvector <- c("p", "Smartphone", "v", "TV", "x", "Laptop", "q", "Tablet")
+category <- data.frame(matrix(categoryvector, nrow = 4, byrow = TRUE))
+names(category) <- c("product_code", "product_category")
+refine <- left_join(refine, category, by = "product_code")
+```
+#Add full address for geocoding
+```{r}
+refine <- refine %>% 
+  mutate(., company_phillips = refine$company == "phillips") %>% 
+  mutate(., company_akzo = refine$company == "akzo") %>% 
+  mutate(., company_van_houten = refine$company == "van houten") %>% 
+  mutate(., company_unilever = refine$company == "unilever")  
+
+refine <- refine %>% 
+ mutate(., product_smartphone = refine$product_code == "p") %>% 
+ mutate(., product_tv = refine$product_code == "v") %>% 
+ mutate(., product_laptop = refine$product_code == "x") %>% 
+ mutate(., product_tablet = refine$product_code == "q")
+```
+#Submit CSV
+```{r}
+head(refine)
+write.csv(refine, "refine_clean.csv", row.names = FALSE)
+```
+
