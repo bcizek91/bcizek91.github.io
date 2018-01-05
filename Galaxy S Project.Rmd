@@ -56,6 +56,6 @@ View(tidy_data)
 #Export
 ```{r}
 head(tidy_data)
-write.csv(tidy_data, "run_analysis", row.names = FALSE)
+write.csv(tidy_data, "run_analysis.csv", row.names = FALSE)
 ```
 
