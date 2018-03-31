@@ -4,10 +4,13 @@ output: html_notebook
 ---
 
 #Load Packages
+```{r}
 library(tidyverse)
+```
 
 #Load Data Set
 ```{r}
+library(tidyverse)
 library(readr)
 refine <- read_csv("refine.csv")
 refine <- tbl_df(refine)
@@ -24,6 +27,7 @@ refine$company <- tolower(refine$company) %>%
 
 #Separate product code and number
 ```{r}
+newcols = c("product_code","product_number")
 refine <- refine %>% 
   separate(., "Product code / number", newcols, sep = "-", remove = FALSE)
 ```

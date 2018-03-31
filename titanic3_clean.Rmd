@@ -1,0 +1,52 @@
+---
+title: "Titanic3_Clean"
+output: html_notebook
+---
+
+# Load Data & Packages
+```{r}
+library(tidyverse)
+titanic3 <- read_csv("titanic3.csv")
+View(titanic3)
+```
+
+# Port of Embarkation
+```{r}
+titanic3 %>% 
+  group_by(embarked) %>% 
+  summarise(n())
+
+titanic3$embarked[is.na(titanic3$embarked)] <- "S"
+```
+
+#Age
+```{r}
+titanic3 %>% 
+    summarise(Min = min(age, na.rm = TRUE),
+              Median = median(age, na.rm = TRUE),
+              Mean = mean(age, na.rm = TRUE),
+              Max = max(age, na.rm = TRUE))
+
+age_mean <- mean(titanic3$age, na.rm = TRUE)
+titanic3$age[is.na(titanic3$age)] <- age_mean
+```
+
+#Lifeboat
+```{r}
+class(titanic3$boat)
+titanic3$boat <- as.character(titanic3$boat)
+titanic3$boat[is.na(titanic3$boat)] <- "NA"
+```
+
+#Cabin
+```{r}
+titanic3 <- titanic3 %>% 
+    mutate(has_cabin_number = ifelse(!is.na(cabin), 1, 0))
+```
+
+#Export CSV
+```{r}
+head(titanic3)
+write.csv(titanic3, "titanic3_clean.csv", row.names = FALSE)
+```
+
