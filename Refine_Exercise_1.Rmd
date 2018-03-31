@@ -10,6 +10,7 @@ library(tidyverse)
 
 #Load Data Set
 ```{r}
+library(tidyverse)
 library(readr)
 refine <- read_csv("refine.csv")
 refine <- tbl_df(refine)
